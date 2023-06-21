@@ -1,12 +1,20 @@
+#!/usr/bin/python
 # paragraph = "The Zen of Python, by Tim Peters Beautiful is better than ugly.Explicit is better than implicit. Simple is better than complex."
 from collections import Counter
 import re
+import argparse
 
 class ContadordePalabras(object):
 
     def __init__(self) -> None:
-        self.demo(True)
-
+        # self.demo(True)
+        parser = argparse.ArgumentParser()
+        parser.add_argument("-i", type=str, help="contar palabras en archivo de texto")
+        args = parser.parse_args()
+        if args.i:
+            entrada = str(args)
+            entrada = entrada[13:-2]
+            self.open_file(entrada,True)
     def check_if_in_list_en(self, words):
         words_en = ["the","of","and","to","a","in","for","is","on","that","by","this","with","i","you","it","not","or","be","are","from","at","as","your","all","have","new","more","an","was","we","will","home","can","us","about","if","page","my","has","search","free","but","our","one","other","do","no","information","time","they","site","he","up","may","what","which","their","news","out","use","any","there","see","only","so","his","when","contact","here","business","who","web","also","now","help","get","pm","view","online","c","e","first","am","been","would","how","were","me","s","services","some","these","click","its","like","service","x","than","find"]
         return words not in words_en
@@ -43,3 +51,6 @@ class ContadordePalabras(object):
         with open(file) as my_file:
             paragraph_file=my_file.read()
         self.word_counter(paragraph_file,bol)
+
+if __name__=="__main__":
+    wctr = ContadordePalabras()
