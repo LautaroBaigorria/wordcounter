@@ -4,17 +4,34 @@ from collections import Counter
 import re
 import argparse
 
+# from newspaper import Article
+
+import trafilatura
+
 class ContadordePalabras(object):
 
     def __init__(self) -> None:
         # self.demo(True)
         parser = argparse.ArgumentParser()
         parser.add_argument("-i", type=str, help="contar palabras en archivo de texto")
+        parser.add_argument("-u", type=str, help="contar palabras en url")
         args = parser.parse_args()
         if args.i:
             entrada = str(args)
-            entrada = entrada[13:-2]
-            self.open_file(entrada,True)
+            entrada = entrada[13:-10]
+            text = self.open_file(entrada)
+            # print (entrada)
+            # print(type(text))
+            self.word_counter(text,True)
+
+        if args.u:
+            entrada = str(args)
+            entrada = entrada[21:-2]
+            text = self.open_url(entrada)
+            # print (entrada)
+            # print(type(text))
+            self.word_counter(text,True)
+
     def check_if_in_list_en(self, words):
         words_en = ["the","of","and","to","a","in","for","is","on","that","by","this","with","i","you","it","not","or","be","are","from","at","as","your","all","have","new","more","an","was","we","will","home","can","us","about","if","page","my","has","search","free","but","our","one","other","do","no","information","time","they","site","he","up","may","what","which","their","news","out","use","any","there","see","only","so","his","when","contact","here","business","who","web","also","now","help","get","pm","view","online","c","e","first","am","been","would","how","were","me","s","services","some","these","click","its","like","service","x","than","find"]
         return words not in words_en
@@ -47,10 +64,14 @@ class ContadordePalabras(object):
             paragraph_file=my_file.read()
         self.word_counter(paragraph_file,bol)
 
-    def open_file(self,file,bol=False):
+    def open_file(self,file):
         with open(file) as my_file:
-            paragraph_file=my_file.read()
-        self.word_counter(paragraph_file,bol)
+            textfromfile=my_file.read()
+        return textfromfile
+    
+    def open_url(self,url):
+        downloaded = trafilatura.fetch_url(url)
+        return trafilatura.extract(downloaded)
 
 if __name__=="__main__":
     wctr = ContadordePalabras()
